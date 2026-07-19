@@ -10,6 +10,7 @@ const ASSETS_TO_CACHE = [
 
 // Instalação do Service Worker e armazenamento dos arquivos estáticos essenciais
 self.addEventListener('install', (event) => {
+  self.skipWaiting(); // 🔥 Força o SW novo a se tornar ativo imediatamente
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
       console.log('SW: Arquivos essenciais indexados no cache com sucesso.');

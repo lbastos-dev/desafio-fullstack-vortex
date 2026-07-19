@@ -1,0 +1,239 @@
+/* ==========================================================================
+   DESIGN SYSTEM FINAL - INSPIRADO NO ENJOEI (ECONOMIA CIRCULAR NO CAMPUS)
+   ========================================================================== */
+
+:root {
+  --enjoei-purple: #61005d;
+  --enjoei-purple-light: #840090;
+  --enjoei-lilac: #c6b1ff;
+  --enjoei-lilac-bg: #eee8ff;
+  --enjoei-neon-green: #ddfd81;
+  --enjoei-off-white: #f9f8f5;
+  --enjoei-dark: #222222;
+  --enjoei-gray-text: #5c525b;
+  --enjoei-border: #e2e0e2;
+}
+
+/* Global: Fundo off-white típico e tipografia limpa */
+body {
+  background-color: var(--enjoei-off-white) !important;
+  font-family: "Proxima Nova", "Arial", sans-serif !important;
+  color: var(--enjoei-dark) !important;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ==========================================================================
+   PROTEÇÃO CONTRA MINÚSCULAS FORÇADAS (CORREÇÃO DE R$ E MAIÚSCULAS)
+   ========================================================================== */
+
+/* Remove a caixa baixa forçada de elementos numéricos, métricas e valores */
+.card,
+.card *,
+.badge,
+[class*="price"],
+.list-group-item,
+.jumbotron h1,
+.display-5 {
+  text-transform: none !important;
+}
+
+/* Título de seções e botões específicos em caixa baixa (Tom amigável do Enjoei) */
+h3, .h5, h4, .h6, .navbar-brand, .btn-success, .btn-group .btn-outline-light {
+  text-transform: lowercase;
+}
+
+/* ==========================================================================
+   SUBSTITUIÇÃO DO VERDE DO BOOTSTRAP POR TONS ROXOS/LILÁS
+   ========================================================================== */
+
+.text-success, 
+h1.text-success,
+span.text-success,
+i.text-success,
+.card-body .text-success {
+  color: var(--enjoei-purple) !important;
+}
+
+.border-success {
+  border-color: var(--enjoei-purple-light) !important;
+}
+
+/* ==========================================================================
+   COMPONENTES DO LAYOUT
+   ========================================================================== */
+
+/* Ajuste fino na Navbar */
+nav.navbar {
+  background-color: #ffffff !important;
+  border-bottom: 1px solid var(--enjoei-border) !important;
+  box-shadow: none !important;
+}
+
+.navbar-brand {
+  font-weight: 700 !important;
+  color: var(--enjoei-purple) !important;
+}
+
+/* Hero / Jumbotron do Topo */
+.bg-light.p-5.rounded-3, 
+.jumbotron {
+  background: #ffffff !important;
+  border: 1px solid var(--enjoei-border) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.02) !important;
+  padding: 4rem 2rem !important;
+  text-align: center;
+}
+
+.jumbotron h1, .display-5 {
+  font-weight: 800 !important;
+  letter-spacing: -0.02em;
+}
+
+.jumbotron p {
+  color: var(--enjoei-gray-text) !important;
+  font-weight: 500;
+}
+
+/* Vitrine de Cards (Métricas e Anúncios) */
+.card {
+  border: none !important;
+  border-radius: 12px !important;
+  background: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+  overflow: hidden;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out !important;
+}
+
+.card:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 12px 24px rgba(97, 0, 93, 0.08) !important;
+}
+
+.card-title, h5.fw-bold {
+  font-size: 1.1rem !important;
+  font-weight: 600 !important;
+  color: var(--enjoei-dark) !important;
+  text-transform: lowercase;
+}
+
+/* Formulários, Inputs e Selects */
+.form-control, .form-select {
+  border: 1px solid var(--enjoei-border) !important;
+  border-radius: 12px !important;
+  padding: 12px 16px !important;
+  font-size: 0.95rem !important;
+  background-color: #ffffff !important;
+  color: var(--enjoei-dark) !important;
+  transition: all 0.15s ease-in-out !important;
+}
+
+.form-control:focus, .form-select:focus {
+  border-color: var(--enjoei-purple-light) !important;
+  box-shadow: 0 0 0 4px var(--enjoei-lilac-bg) !important;
+  outline: 0 !important;
+}
+
+/* ==========================================================================
+   BOTÕES E ACÕES
+   ========================================================================== */
+
+/* Varre o botão de publicar e todos os botões success */
+.btn-success,
+.btn-success:focus,
+.btn-success:active,
+.btn-success:hover,
+.btn-success:disabled,
+.btn-success.active,
+.btn-success.show,
+[class*="btn-success"] {
+  background-color: var(--enjoei-purple) !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 20px !important;
+  box-shadow: none !important;
+  font-weight: 700 !important;
+  padding: 12px 28px !important;
+}
+
+.btn-success:hover {
+  background-color: var(--enjoei-purple-light) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(97, 0, 93, 0.2) !important;
+}
+
+/* Botões de Ação dentro dos cards (Ex: 'tenho interesse') */
+.card button,
+.card .btn,
+.card a.btn {
+  background-color: var(--enjoei-purple) !important;
+  background-image: none !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 20px !important;
+  font-weight: 700 !important;
+  padding: 8px 16px !important;
+  font-size: 0.9rem !important;
+  transition: all 0.15s ease-in-out !important;
+}
+
+.card button:hover,
+.card .btn:hover,
+.card a.btn:hover {
+  background-color: var(--enjoei-purple-light) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 12px rgba(97, 0, 93, 0.15) !important;
+}
+
+/* Alternador Desktop/Mobile */
+.btn-group .btn-outline-light {
+  background-color: #ffffff !important;
+  border: 1px solid var(--enjoei-border) !important;
+  color: var(--enjoei-gray-text) !important;
+  font-weight: 600 !important;
+  border-radius: 12px !important;
+  margin: 0 4px;
+  font-size: 0.85rem;
+}
+
+.btn-group .btn-outline-light:hover, 
+.btn-group .btn-success {
+  background-color: var(--enjoei-lilac-bg) !important;
+  color: var(--enjoei-purple) !important;
+  border-color: var(--enjoei-lilac) !important;
+  font-weight: 700 !important;
+}
+
+/* ==========================================================================
+   BADGES E ETIQUETAS
+   ========================================================================== */
+
+.badge.bg-success {
+  background-color: var(--enjoei-neon-green) !important;
+  color: var(--enjoei-purple-light) !important;
+  font-weight: 700 !important;
+  padding: 6px 14px !important;
+  border-radius: 24px !important;
+  font-size: 0.85rem !important;
+  border: none !important;
+}
+
+.badge.bg-info {
+  background-color: var(--enjoei-lilac-bg) !important;
+  color: var(--enjoei-purple) !important;
+  font-weight: 700 !important;
+  padding: 6px 14px !important;
+  border-radius: 24px !important;
+  font-size: 0.85rem !important;
+  border: none !important;
+}
+
+.btn-link.text-danger {
+  color: var(--enjoei-gray-text) !important;
+  transition: color 0.2s ease;
+}
+
+.btn-link.text-danger:hover {
+  color: #da1e28 !important;
+}

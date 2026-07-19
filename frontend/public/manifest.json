@@ -3,7 +3,12 @@
   "name": "Desapego Universitário - Economia Circular",
   "icons": [
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/3253/3253113.png",
+      "src": "icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "icon-512.png",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "any maskable"
