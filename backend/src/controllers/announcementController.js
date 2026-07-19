@@ -4,7 +4,8 @@ class AnnouncementController {
   // POST /anuncios
   static async create(req, res) {
     try {
-      const { title, description, category, price, isDonation } = req.body;
+      const { title, description, category, price, isDonation, imageUrl } = req.body;
+      const userId = req.userId; // Captura o ID do usuário vindo do Token JWT válido
 
       // Tratamento de erros e validação de campos obrigatórios (Diferencial bônus)
       if (!title || !description || !category) {
@@ -15,8 +16,17 @@ class AnnouncementController {
         return res.status(400).json({ error: 'Itens que não são doação precisam de um preço válido.' });
       }
 
-      // CORRIGIDO: Adicionado await para aguardar a inserção no SQLite
-      const newAnnouncement = await AnnouncementModel.create(req.body);
+      // MODIFICADO: Passando apenas as variáveis validadas e higienizadas + o userId para o Model
+      const newAnnouncement = await AnnouncementModel.create({
+        title,
+        description,
+        category,
+        price,
+        isDonation,
+        imageUrl,
+        userId // Bônus: Vincula o anúncio ao criador dele
+      });
+
       return res.status(201).json(newAnnouncement);
     } catch (error) {
       console.error('Erro no Controller ao criar anúncio:', error);
@@ -29,7 +39,6 @@ class AnnouncementController {
     try {
       const { category } = req.query; // Filtro básico exigido no edital
       
-      // CORRIGIDO: Adicionado await para aguardar a busca no banco de dados
       const data = await AnnouncementModel.findAll(category);
       return res.status(200).json(data);
     } catch (error) {
@@ -43,7 +52,6 @@ class AnnouncementController {
     try {
       const { id } = req.params;
       
-      // CORRIGIDO: Adicionado await para aguardar a remoção do registro
       const success = await AnnouncementModel.delete(id);
 
       if (!success) {
