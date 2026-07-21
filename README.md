@@ -245,21 +245,20 @@ origin da requisição) como solução.
 
 **Como foi identificado:** Ao inspecionar os headers da resposta via
 `curl -I`, percebi que o header `access-control-allow-origin` já estava
-presente e correto. O problema real era um **trailing slash** na variável de
-ambiente `FRONTEND_URL` no Render — `https://app.vercel.app/` em vez de
-`https://app.vercel.app`. O navegador compara origins de forma exata e
-rejeitava o header porISMATCH.
+presente e correto. O problema real era uma barra ( LITERALMENTE, acertei tudo e errei em uma barra ) 
+na variável de ambiente `FRONTEND_URL` no Render — `https://app.vercel.app/` em vez de
+`https://app.vercel.app`.
 
 **Como foi corrigido:** Após análise manual dos headers com curl e
 comparação com o código do backend, identifiquei que a IA havia diagnosticado
-o sintoma (CORS bloqueado) mas não a causa raiz (trailing slash na env var).
+o sintoma (CORS bloqueado) mas não a causa do mal (a famosa barra tava em todo canto -> env var).
 A correção definitiva foi adicionado `.replace(/\/+$/, '')` na leitura da
 variável de ambiente, garantindo que o CORS receba sempre uma URL sem barra final.
 
 **Lição aprendida:** IAs são eficientes em sugerir soluções para problemas
 conhecidos, mas podem falhar em diagnósticos que exigem inspeção de estado
-em runtime (headers HTTP, valores de env vars em produção). A auditoria
-humana — testar com curl, inspecionar logs, comparar com o código — continua
+em runtime (headers HTTP, valores de env vars em produção). É importante demais a atenção
+humana ( principalmente em arquivos de variáveis de ambiente ) — testar com curl, inspecionar logs, comparar com o código — continua
 sendo essencial para validar qualquer correção sugerida.
 
 ---
