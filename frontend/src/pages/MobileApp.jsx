@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { apiGet, apiPost, apiPostForm, apiDelete } from '../api';
 
 const CATEGORIES = [
   { value: 'Saude', label: 'Saúde / Jalecos' },
@@ -27,8 +28,7 @@ function MobileApp() {
 
   const fetchMyItems = async () => {
     try {
-      const response = await fetch('/api/anuncios');
-      const data = await response.json();
+      const data = await apiGet('/api/anuncios');
       setMyItems(data);
     } catch (error) {
       console.error('Erro ao buscar itens:', error);
@@ -45,18 +45,7 @@ function MobileApp() {
     setLoginLoading(true);
 
     try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ matricula, password }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Falha na autenticação.');
-      }
-
+      const data = await apiPost('/api/auth/login', { matricula, password });
       localStorage.setItem('token', data.token);
       setToken(data.token);
     } catch (error) {
@@ -88,20 +77,7 @@ function MobileApp() {
     }
 
     try {
-      const response = await fetch('/api/anuncios', {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-        body: formData,
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Erro ao publicar item.');
-      }
-
+      await apiPostForm('/api/anuncios', formData, token);
       setTitle('');
       setDescription('');
       setPrice('');
@@ -119,15 +95,8 @@ function MobileApp() {
   const handleDelete = async (id) => {
     if (!confirm('Deseja realmente remover este anúncio?')) return;
     try {
-      const response = await fetch(`/api/anuncios/${id}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-        },
-      });
-      if (response.ok) {
-        fetchMyItems();
-      }
+      await apiDelete(`/api/anuncios/${id}`, token);
+      fetchMyItems();
     } catch (error) {
       console.error('Erro ao deletar item:', error);
     }

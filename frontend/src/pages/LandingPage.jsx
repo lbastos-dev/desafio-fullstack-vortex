@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { apiGet } from '../api';
 
 const CATEGORIES = [
   { value: '', label: 'Todas as Categorias' },
@@ -19,11 +20,10 @@ function LandingPage() {
     const fetchAnnouncements = async () => {
       setLoading(true);
       try {
-        const url = category
+        const path = category
           ? `/api/anuncios?category=${category}`
           : '/api/anuncios';
-        const response = await fetch(url);
-        const data = await response.json();
+        const data = await apiGet(path);
         setAnnouncements(data);
       } catch (error) {
         console.error('Erro ao buscar anúncios:', error);
