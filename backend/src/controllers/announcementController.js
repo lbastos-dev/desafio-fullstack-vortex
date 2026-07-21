@@ -4,10 +4,9 @@ class AnnouncementController {
   // POST /anuncios
   static async create(req, res) {
     try {
-      const { title, description, category, price, isDonation, imageUrl } = req.body;
-      const userId = req.userId; // Captura o ID do usuário vindo do Token JWT válido
+      const { title, description, category, price, isDonation } = req.body;
+      const userId = req.userId;
 
-      // Tratamento de erros e validação de campos obrigatórios (Diferencial bônus)
       if (!title || !description || !category) {
         return res.status(400).json({ error: 'Título, descrição e categoria são obrigatórios.' });
       }
@@ -16,7 +15,10 @@ class AnnouncementController {
         return res.status(400).json({ error: 'Itens que não são doação precisam de um preço válido.' });
       }
 
-      // MODIFICADO: Passando apenas as variáveis validadas e higienizadas + o userId para o Model
+      const imageUrl = req.file
+        ? `http://localhost:3000/uploads/${req.file.filename}`
+        : null;
+
       const newAnnouncement = await AnnouncementModel.create({
         title,
         description,
@@ -24,7 +26,7 @@ class AnnouncementController {
         price,
         isDonation,
         imageUrl,
-        userId // Bônus: Vincula o anúncio ao criador dele
+        userId
       });
 
       return res.status(201).json(newAnnouncement);

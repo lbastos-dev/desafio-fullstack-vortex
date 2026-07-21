@@ -1,144 +1,186 @@
 /* ==========================================================================
-   DESIGN SYSTEM FINAL - INSPIRADO NO ENJOEI (ECONOMIA CIRCULAR NO CAMPUS)
+   DESIGN SYSTEM INSTITUCIONAL — UNIFOR (ECONOMIA CIRCULAR NO CAMPUS)
+   Paleta Oficial: Anil, Marinho, Gelo, Azul Claro
+   Tipografia: Satoshi Variable
    ========================================================================== */
 
 :root {
-  --enjoei-purple: #61005d;
-  --enjoei-purple-light: #840090;
-  --enjoei-lilac: #c6b1ff;
-  --enjoei-lilac-bg: #eee8ff;
-  --enjoei-neon-green: #ddfd81;
-  --enjoei-off-white: #f9f8f5;
-  --enjoei-dark: #222222;
-  --enjoei-gray-text: #5c525b;
-  --enjoei-border: #e2e0e2;
-}
+  /* Paleta de Cores Oficial UNIFOR */
+  --unfor-anil: #004AF7;
+  --unfor-anil-dark: #003ACC;
+  --unfor-anil-light: #336EF9;
+  --unfor-marinho: #132190;
+  --unfor-marinho-dark: #0E1A6B;
+  --unfor-gelo: #E4F2FE;
+  --unfor-gelo-dark: #C9E4FC;
+  --unfor-azul-claro: #87B7FE;
+  --unfor-azul-claro-light: #B3D1FF;
 
-/* Global: Fundo off-white típico e tipografia limpa */
-body {
-  background-color: var(--enjoei-off-white) !important;
-  font-family: "Proxima Nova", "Arial", sans-serif !important;
-  color: var(--enjoei-dark) !important;
-  -webkit-font-smoothing: antialiased;
+  /* Cores Funcionais (derivadas da paleta) */
+  --unfor-text: #1A1A2E;
+  --unfor-text-muted: #5A6078;
+  --unfor-bg: #FFFFFF;
+  --unfor-bg-alt: #F7FAFD;
+  --unfor-border: #D6E4F0;
+  --unfor-success: #004AF7;
+  --unfor-danger: #DC3545;
+  --unfor-white: #FFFFFF;
+
+  /* Sombras */
+  --shadow-sm: 0 1px 3px rgba(19, 33, 144, 0.06);
+  --shadow-md: 0 4px 12px rgba(19, 33, 144, 0.08);
+  --shadow-lg: 0 8px 24px rgba(19, 33, 144, 0.10);
+
+  /* Border Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
 }
 
 /* ==========================================================================
-   PROTEÇÃO CONTRA MINÚSCULAS FORÇADAS (CORREÇÃO DE R$ E MAIÚSCULAS)
+   GLOBAL RESET & TIPOGRAFIA
    ========================================================================== */
 
-/* Remove a caixa baixa forçada de elementos numéricos, métricas e valores */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--unfor-bg);
+  font-family: 'Satoshi', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-weight: 400;
+  color: var(--unfor-text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Satoshi', sans-serif;
+  color: var(--unfor-marinho);
+  line-height: 1.3;
+}
+
+a {
+  color: var(--unfor-anil);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+a:hover {
+  color: var(--unfor-anil-dark);
+}
+
+/* ==========================================================================
+   TEXT TRANSFORM — preservar texto original do React
+   ========================================================================== */
+
 .card,
 .card *,
 .badge,
-[class*="price"],
 .list-group-item,
 .jumbotron h1,
-.display-5 {
+.display-5,
+.navbar-brand {
   text-transform: none !important;
 }
 
-/* Título de seções e botões específicos em caixa baixa (Tom amigável do Enjoei) */
-h3, .h5, h4, .h6, .navbar-brand, .btn-success, .btn-group .btn-outline-light {
-  text-transform: lowercase;
-}
-
 /* ==========================================================================
-   SUBSTITUIÇÃO DO VERDE DO BOOTSTRAP POR TONS ROXOS/LILÁS
+   NAVBAR INSTITUCIONAL
    ========================================================================== */
 
-.text-success, 
-h1.text-success,
-span.text-success,
-i.text-success,
-.card-body .text-success {
-  color: var(--enjoei-purple) !important;
-}
-
-.border-success {
-  border-color: var(--enjoei-purple-light) !important;
-}
-
-/* ==========================================================================
-   COMPONENTES DO LAYOUT
-   ========================================================================== */
-
-/* Ajuste fino na Navbar */
-nav.navbar {
-  background-color: #ffffff !important;
-  border-bottom: 1px solid var(--enjoei-border) !important;
-  box-shadow: none !important;
+nav.navbar,
+.menu-main-bar {
+  background-color: var(--unfor-white) !important;
+  border-bottom: 1px solid var(--unfor-border) !important;
+  box-shadow: var(--shadow-sm) !important;
+  padding: 0.5rem 0;
 }
 
 .navbar-brand {
   font-weight: 700 !important;
-  color: var(--enjoei-purple) !important;
+  color: var(--unfor-marinho) !important;
 }
 
-/* Hero / Jumbotron do Topo */
-.bg-light.p-5.rounded-3, 
-.jumbotron {
-  background: #ffffff !important;
-  border: 1px solid var(--enjoei-border) !important;
-  border-radius: 16px !important;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.02) !important;
-  padding: 4rem 2rem !important;
-  text-align: center;
+.navbar-sub-title {
+  font-size: 0.9rem !important;
+  font-weight: 500 !important;
+  color: var(--unfor-text-muted) !important;
 }
 
-.jumbotron h1, .display-5 {
-  font-weight: 800 !important;
-  letter-spacing: -0.02em;
-}
-
-.jumbotron p {
-  color: var(--enjoei-gray-text) !important;
-  font-weight: 500;
-}
-
-/* Vitrine de Cards (Métricas e Anúncios) */
-.card {
-  border: none !important;
-  border-radius: 12px !important;
-  background: #ffffff !important;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
-  overflow: hidden;
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out !important;
-}
-
-.card:hover {
-  transform: translateY(-4px) !important;
-  box-shadow: 0 12px 24px rgba(97, 0, 93, 0.08) !important;
-}
-
-.card-title, h5.fw-bold {
-  font-size: 1.1rem !important;
-  font-weight: 600 !important;
-  color: var(--enjoei-dark) !important;
-  text-transform: lowercase;
-}
-
-/* Formulários, Inputs e Selects */
-.form-control, .form-select {
-  border: 1px solid var(--enjoei-border) !important;
-  border-radius: 12px !important;
-  padding: 12px 16px !important;
-  font-size: 0.95rem !important;
-  background-color: #ffffff !important;
-  color: var(--enjoei-dark) !important;
-  transition: all 0.15s ease-in-out !important;
-}
-
-.form-control:focus, .form-select:focus {
-  border-color: var(--enjoei-purple-light) !important;
-  box-shadow: 0 0 0 4px var(--enjoei-lilac-bg) !important;
-  outline: 0 !important;
+.menu-main-bar .container-fluid {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding-left: 5% !important;
+  padding-right: 5% !important;
 }
 
 /* ==========================================================================
-   BOTÕES E ACÕES
+   BOTÕES DE ALTERNÂNCIA DESKTOP/MOBILE
    ========================================================================== */
 
-/* Varre o botão de publicar e todos os botões success */
+.btn-group.btn-group-sm {
+  margin-right: 0.5rem !important;
+}
+
+.simulation-controls .btn-outline-light,
+.btn-group .btn-outline-light {
+  background-color: var(--unfor-white) !important;
+  border: 1px solid var(--unfor-border) !important;
+  color: var(--unfor-text-muted) !important;
+  font-weight: 600 !important;
+  font-size: 0.85rem !important;
+  padding: 6px 16px !important;
+  border-radius: var(--radius-sm) !important;
+  transition: all 0.15s ease-in-out !important;
+}
+
+.simulation-controls .btn-outline-light:hover,
+.btn-group .btn-outline-light:hover {
+  background-color: var(--unfor-gelo) !important;
+  border-color: var(--unfor-azul-claro) !important;
+  color: var(--unfor-anil) !important;
+}
+
+.simulation-controls .btn-success,
+.simulation-controls .btn-success.active,
+.btn-group .btn-success {
+  background-color: var(--unfor-anil) !important;
+  border-color: var(--unfor-anil) !important;
+  color: var(--unfor-white) !important;
+  font-weight: 700 !important;
+  font-size: 0.85rem !important;
+  padding: 6px 16px !important;
+  border-radius: var(--radius-sm) !important;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* ==========================================================================
+   BOTÕES — PALETA UNIFOR
+   ========================================================================== */
+
+.btn-primary,
+.btn-anil {
+  background-color: var(--unfor-anil) !important;
+  border-color: var(--unfor-anil) !important;
+  color: var(--unfor-white) !important;
+  font-weight: 600 !important;
+  border-radius: var(--radius-sm) !important;
+  padding: 0.45rem 1.25rem !important;
+  transition: all 0.15s ease-in-out !important;
+}
+
+.btn-primary:hover,
+.btn-anil:hover {
+  background-color: var(--unfor-anil-dark) !important;
+  border-color: var(--unfor-anil-dark) !important;
+}
+
 .btn-success,
 .btn-success:focus,
 .btn-success:active,
@@ -147,62 +189,206 @@ nav.navbar {
 .btn-success.active,
 .btn-success.show,
 [class*="btn-success"] {
-  background-color: var(--enjoei-purple) !important;
-  background-image: none !important;
-  color: #ffffff !important;
-  border: none !important;
-  border-radius: 20px !important;
+  background-color: var(--unfor-anil) !important;
+  border-color: var(--unfor-anil) !important;
+  color: var(--unfor-white) !important;
+  border-radius: var(--radius-sm) !important;
+  font-weight: 600 !important;
+  padding: 0.45rem 1.25rem !important;
   box-shadow: none !important;
-  font-weight: 700 !important;
-  padding: 12px 28px !important;
 }
 
-.btn-success:hover {
-  background-color: var(--enjoei-purple-light) !important;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(97, 0, 93, 0.2) !important;
+.btn-success:hover,
+.btn-success:focus {
+  background-color: var(--unfor-anil-dark) !important;
+  border-color: var(--unfor-anil-dark) !important;
 }
 
-/* Botões de Ação dentro dos cards (Ex: 'tenho interesse') */
+.btn-outline-primary {
+  color: var(--unfor-anil) !important;
+  border-color: var(--unfor-anil) !important;
+  background-color: transparent !important;
+  font-weight: 600 !important;
+  border-radius: var(--radius-sm) !important;
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--unfor-anil) !important;
+  color: var(--unfor-white) !important;
+}
+
+.btn-marinho {
+  background-color: var(--unfor-marinho) !important;
+  border-color: var(--unfor-marinho) !important;
+  color: var(--unfor-white) !important;
+  font-weight: 600 !important;
+  border-radius: var(--radius-sm) !important;
+}
+
+.btn-marinho:hover {
+  background-color: var(--unfor-marinho-dark) !important;
+  border-color: var(--unfor-marinho-dark) !important;
+}
+
+/* Botões dentro dos cards */
 .card button,
 .card .btn,
 .card a.btn {
-  background-color: var(--enjoei-purple) !important;
-  background-image: none !important;
-  color: #ffffff !important;
-  border: none !important;
-  border-radius: 20px !important;
-  font-weight: 700 !important;
-  padding: 8px 16px !important;
-  font-size: 0.9rem !important;
-  transition: all 0.15s ease-in-out !important;
+  background-color: var(--unfor-marinho) !important;
+  border-color: var(--unfor-marinho) !important;
+  color: var(--unfor-white) !important;
+  border-radius: var(--radius-sm) !important;
+  font-weight: 600 !important;
+  padding: 0.35rem 0.75rem !important;
+  font-size: 0.85rem !important;
 }
 
 .card button:hover,
 .card .btn:hover,
 .card a.btn:hover {
-  background-color: var(--enjoei-purple-light) !important;
-  transform: translateY(-1px) !important;
-  box-shadow: 0 4px 12px rgba(97, 0, 93, 0.15) !important;
+  background-color: var(--unfor-marinho-dark) !important;
+  border-color: var(--unfor-marinho-dark) !important;
 }
 
-/* Alternador Desktop/Mobile */
-.btn-group .btn-outline-light {
-  background-color: #ffffff !important;
-  border: 1px solid var(--enjoei-border) !important;
-  color: var(--enjoei-gray-text) !important;
-  font-weight: 600 !important;
-  border-radius: 12px !important;
-  margin: 0 4px;
-  font-size: 0.85rem;
+.btn-link.text-danger {
+  color: var(--unfor-text-muted) !important;
+  text-decoration: none;
 }
 
-.btn-group .btn-outline-light:hover, 
-.btn-group .btn-success {
-  background-color: var(--enjoei-lilac-bg) !important;
-  color: var(--enjoei-purple) !important;
-  border-color: var(--enjoei-lilac) !important;
+.btn-link.text-danger:hover {
+  color: var(--unfor-danger) !important;
+}
+
+/* ==========================================================================
+   HERO / JUMBOTRON
+   ========================================================================== */
+
+.bg-light.p-5.rounded-3,
+.jumbotron {
+  background: linear-gradient(135deg, var(--unfor-gelo) 0%, var(--unfor-gelo-dark) 100%) !important;
+  border: 1px solid var(--unfor-azul-claro-light) !important;
+  border-radius: var(--radius-lg) !important;
+  padding: 4rem 2rem !important;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.bg-light.p-5.rounded-3::before,
+.jumbotron::before {
+  content: '';
+  position: absolute;
+  top: -40px;
+  right: -40px;
+  width: 160px;
+  height: 160px;
+  border: 3px solid var(--unfor-azul-claro-light);
+  border-radius: 50%;
+  opacity: 0.3;
+}
+
+.bg-light.p-5.rounded-3::after,
+.jumbotron::after {
+  content: '';
+  position: absolute;
+  bottom: -30px;
+  left: -30px;
+  width: 120px;
+  height: 120px;
+  border: 3px solid var(--unfor-azul-claro-light);
+  border-radius: 50%;
+  opacity: 0.2;
+}
+
+.jumbotron h1,
+.display-5 {
   font-weight: 700 !important;
+  color: var(--unfor-marinho) !important;
+  line-height: 1.2;
+}
+
+.jumbotron p {
+  color: var(--unfor-text-muted) !important;
+  font-weight: 400;
+}
+
+/* ==========================================================================
+   CARDS — VITRINE DE ANÚNCIOS
+   ========================================================================== */
+
+.card {
+  background-color: var(--unfor-white) !important;
+  border: 1px solid var(--unfor-border) !important;
+  border-radius: var(--radius-md) !important;
+  box-shadow: var(--shadow-sm) !important;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.2s ease-in-out, transform 0.2s ease-in-out !important;
+  overflow: hidden;
+}
+
+.card:hover {
+  border-color: var(--unfor-azul-claro) !important;
+  box-shadow: var(--shadow-md) !important;
+  transform: translateY(-2px);
+}
+
+.card-title,
+h5.fw-bold {
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  color: var(--unfor-marinho) !important;
+}
+
+.card-text {
+  color: var(--unfor-text-muted) !important;
+  font-size: 0.9rem !important;
+}
+
+.card-img-top {
+  border-bottom: 1px solid var(--unfor-border) !important;
+}
+
+.card-footer {
+  background-color: var(--unfor-bg-alt) !important;
+  border-top: 1px solid var(--unfor-border) !important;
+}
+
+/* ==========================================================================
+   FORMULÁRIOS
+   ========================================================================== */
+
+.form-control,
+.form-select {
+  background-color: var(--unfor-white) !important;
+  border: 1px solid var(--unfor-border) !important;
+  border-radius: var(--radius-sm) !important;
+  padding: 0.5rem 0.75rem !important;
+  font-size: 0.95rem !important;
+  color: var(--unfor-text) !important;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out !important;
+  font-family: 'Satoshi', sans-serif !important;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--unfor-azul-claro) !important;
+  box-shadow: 0 0 0 3px rgba(0, 74, 247, 0.12) !important;
+  outline: 0 !important;
+}
+
+.form-label {
+  font-weight: 600 !important;
+  color: var(--unfor-marinho) !important;
+  font-size: 0.875rem !important;
+  margin-bottom: 0.35rem !important;
+}
+
+.form-check-input:checked {
+  background-color: var(--unfor-anil) !important;
+  border-color: var(--unfor-anil) !important;
+}
+
+.form-check-input:focus {
+  box-shadow: 0 0 0 3px rgba(0, 74, 247, 0.12) !important;
 }
 
 /* ==========================================================================
@@ -210,30 +396,284 @@ nav.navbar {
    ========================================================================== */
 
 .badge.bg-success {
-  background-color: var(--enjoei-neon-green) !important;
-  color: var(--enjoei-purple-light) !important;
+  background-color: var(--unfor-anil) !important;
+  color: var(--unfor-white) !important;
   font-weight: 700 !important;
-  padding: 6px 14px !important;
-  border-radius: 24px !important;
-  font-size: 0.85rem !important;
-  border: none !important;
+  border-radius: var(--radius-sm) !important;
+  padding: 0.3em 0.6em !important;
+  font-size: 0.8rem !important;
 }
 
 .badge.bg-info {
-  background-color: var(--enjoei-lilac-bg) !important;
-  color: var(--enjoei-purple) !important;
+  background-color: var(--unfor-gelo) !important;
+  color: var(--unfor-marinho) !important;
   font-weight: 700 !important;
-  padding: 6px 14px !important;
-  border-radius: 24px !important;
-  font-size: 0.85rem !important;
-  border: none !important;
+  border-radius: var(--radius-sm) !important;
+  padding: 0.3em 0.6em !important;
+  font-size: 0.8rem !important;
+  border: 1px solid var(--unfor-azul-claro-light) !important;
 }
 
-.btn-link.text-danger {
-  color: var(--enjoei-gray-text) !important;
-  transition: color 0.2s ease;
+.badge.bg-danger {
+  background-color: var(--unfor-danger) !important;
+  color: var(--unfor-white) !important;
 }
 
-.btn-link.text-danger:hover {
-  color: #da1e28 !important;
+/* ==========================================================================
+   LIST GROUP — LISTAGEM DE ANÚNCIOS
+   ========================================================================== */
+
+.list-group-item {
+  background-color: var(--unfor-white) !important;
+  border: 1px solid var(--unfor-border) !important;
+  padding: 0.75rem 1.25rem !important;
+  margin-bottom: -1px !important;
+  border-radius: var(--radius-sm) !important;
+  transition: background-color 0.15s ease;
+}
+
+.list-group-item:hover {
+  background-color: var(--unfor-gelo) !important;
+}
+
+/* ==========================================================================
+   TEXT COLORS — ALINHAMENTO UNIFOR
+   ========================================================================== */
+
+.text-success,
+h1.text-success,
+span.text-success,
+i.text-success,
+.card-body .text-success {
+  color: var(--unfor-anil) !important;
+}
+
+.text-marinho {
+  color: var(--unfor-marinho) !important;
+}
+
+.text-anil {
+  color: var(--unfor-anil) !important;
+}
+
+.bg-gelo {
+  background-color: var(--unfor-gelo) !important;
+}
+
+.border-success {
+  border-color: var(--unfor-anil) !important;
+}
+
+.border-anil {
+  border-color: var(--unfor-anil) !important;
+}
+
+.border-left-anil {
+  border-left: 4px solid var(--unfor-anil) !important;
+}
+
+.border-left-marinho {
+  border-left: 4px solid var(--unfor-marinho) !important;
+}
+
+/* ==========================================================================
+   ESTATÍSTICAS — CARDS NUMÉRICOS
+   ========================================================================== */
+
+.stat-card {
+  background-color: var(--unfor-white);
+  border: 1px solid var(--unfor-border);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  text-align: center;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.stat-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.stat-card .stat-number {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--unfor-anil);
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.stat-card .stat-label {
+  font-size: 0.9rem;
+  color: var(--unfor-text-muted);
+  font-weight: 500;
+}
+
+/* ==========================================================================
+   HERO CTA BUTTONS
+   ========================================================================== */
+
+.hero-cta-group {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}
+
+.hero-cta-group .btn {
+  padding: 0.65rem 1.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  transition: all 0.2s ease;
+}
+
+/* ==========================================================================
+   SECTION HEADERS
+   ========================================================================== */
+
+.section-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--unfor-marinho);
+  margin-bottom: 1.25rem;
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 48px;
+  height: 3px;
+  background-color: var(--unfor-anil);
+  border-radius: 2px;
+}
+
+/* ==========================================================================
+   FOOTER INSTITUCIONAL
+   ========================================================================== */
+
+.footer-unifor {
+  background-color: var(--unfor-marinho);
+  color: var(--unfor-white);
+  padding: 2rem 0;
+  margin-top: 4rem;
+}
+
+.footer-unifor a {
+  color: var(--unfor-azul-claro);
+}
+
+.footer-unifor a:hover {
+  color: var(--unfor-white);
+}
+
+.footer-unifor .footer-brand {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.footer-unifor .footer-copy {
+  font-size: 0.85rem;
+  opacity: 0.7;
+}
+
+/* ==========================================================================
+   LOADING & FEEDBACK
+   ========================================================================== */
+
+.loading-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--unfor-azul-claro-light);
+  border-top-color: var(--unfor-anil);
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   ALERTAS
+   ========================================================================== */
+
+.alert-danger {
+  background-color: #FEF2F2 !important;
+  border-color: #FECACA !important;
+  color: #991B1B !important;
+  border-radius: var(--radius-sm) !important;
+}
+
+.alert-success {
+  background-color: var(--unfor-gelo) !important;
+  border-color: var(--unfor-azul-claro-light) !important;
+  color: var(--unfor-marinho) !important;
+  border-radius: var(--radius-sm) !important;
+}
+
+/* ==========================================================================
+   RESPONSIVIDADE
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .menu-main-bar .container-fluid {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  .menu-main-bar img {
+    height: 60px !important;
+  }
+
+  .simulation-controls {
+    display: none !important;
+  }
+
+  .jumbotron,
+  .bg-light.p-5.rounded-3 {
+    padding: 2.5rem 1.25rem !important;
+  }
+
+  .jumbotron h1,
+  .display-5 {
+    font-size: 1.5rem !important;
+  }
+
+  .stat-card .stat-number {
+    font-size: 1.5rem;
+  }
+
+  .section-title {
+    font-size: 1.25rem;
+  }
+
+  .hero-cta-group .btn {
+    width: 100%;
+  }
+
+  .footer-unifor {
+    text-align: center;
+    padding: 1.5rem 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .card-img-top {
+    height: 160px !important;
+  }
 }

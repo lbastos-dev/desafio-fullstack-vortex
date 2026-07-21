@@ -1,11 +1,11 @@
 const db = require('../config/database');
 
 class AnnouncementModel {
-  static create({ title, description, category, price, isDonation, imageUrl }) {
+  static create({ title, description, category, price, isDonation, imageUrl, userId }) {
     return new Promise((resolve, reject) => {
       const query = `
-        INSERT INTO announcements (title, description, category, price, isDonation, imageUrl, createdAt)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO announcements (title, description, category, price, isDonation, imageUrl, userId, createdAt)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
       `;
       
       const finalPrice = isDonation ? 0 : Number(price);
@@ -15,11 +15,10 @@ class AnnouncementModel {
 
       db.run(
         query,
-        [title, description, category, finalPrice, finalIsDonation, finalImageUrl, createdAt],
+        [title, description, category, finalPrice, finalIsDonation, finalImageUrl, userId, createdAt],
         function (err) {
           if (err) return reject(err);
           
-          // 'this.lastID' retorna o ID gerado automaticamente pelo SQLite
           resolve({
             id: this.lastID,
             title,
@@ -28,6 +27,7 @@ class AnnouncementModel {
             price: finalPrice,
             isDonation: Boolean(finalIsDonation),
             imageUrl: finalImageUrl,
+            userId,
             createdAt
           });
         }

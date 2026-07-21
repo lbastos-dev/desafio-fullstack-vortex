@@ -1,56 +1,110 @@
-const UserModel = require('../models/userModel');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const db = require('../config/database');
 
-const JWT_SECRET = 'vortex_lab_secret_key_2026'; // Em produção, usar variável de ambiente
+const JWT_SECRET = process.env.JWT_SECRET || 'unifor_vortex_secret_key';
 
-class AuthController {
-  static async register(req, res) {
-    try {
-      const { name, email, password } = req.body;
+const register = async (req, res) => {
+  const { name, matricula, password } = req.body;
 
-      if (!name || !email || !password) {
-        return res.status(400).json({ error: 'Todos os campos são obrigatórios.' });
-      }
-
-      // Criptografa a senha antes de salvar
-      const hashedPassword = await bcrypt.hash(password, 10);
-      
-      const newUser = await UserModel.create({ name, email, password: hashedPassword });
-      return res.status(201).json(newUser);
-    } catch (error) {
-      if (error.message.includes('UNIQUE')) {
-        return res.status(400).json({ error: 'Este e-mail já está cadastrado.' });
-      }
-      return res.status(500).json({ error: 'Erro ao registrar usuário.' });
-    }
+  if (!name || !matricula || !password) {
+    return res.status(400).json({ error: 'Nome, matrícula e senha são obrigatórios.' });
   }
 
-  static async login(req, res) {
-    try {
-      const { email, password } = req.body;
-
-      const user = await UserModel.findByEmail(email);
-      if (!user) {
-        return res.status(401).json({ error: 'E-mail ou senha inválidos.' });
-      }
-
-      const isPasswordValid = await bcrypt.compare(password, user.password);
-      if (!isPasswordValid) {
-        return res.status(401).json({ error: 'E-mail ou senha inválidos.' });
-      }
-
-      // Gera o Token JWT válido por 24 horas
-      const token = jwt.sign({ id: user.id, name: user.name }, JWT_SECRET, { expiresIn: '24h' });
-
-      return res.status(200).json({
-        token,
-        user: { id: user.id, name: user.name, email: user.email }
+  try {
+    const existing = await new Promise((resolve, reject) => {
+      db.get('SELECT id FROM users WHERE matricula = ?', [matricula], (err, row) => {
+        if (err) return reject(err);
+        resolve(row);
       });
-    } catch (error) {
-      return res.status(500).json({ error: 'Erro ao realizar login.' });
-    }
-  }
-}
+    });
 
-module.exports = AuthController;
+    if (existing) {
+      return res.status(409).json({ error: 'Matrícula já cadastrada.' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const userId = await new Promise((resolve, reject) => {
+      db.run(
+        'INSERT INTO users (name, matricula, password) VALUES (?, ?, ?)',
+        [name, matricula, hashedPassword],
+        function (err) {
+          if (err) return reject(err);
+          resolve(this.lastID);
+        }
+      );
+    });
+
+    const token = jwt.sign({ id: userId, matricula }, JWT_SECRET, { expiresIn: '8h' });
+
+    return res.status(201).json({
+      token,
+      usuario: { id: userId, name, matricula }
+    });
+  } catch (error) {
+    console.error('Erro no registro:', error);
+    return res.status(500).json({ error: 'Erro interno no servidor.' });
+  }
+};
+
+const login = async (req, res) => {
+  const { matricula, password } = req.body;
+
+  if (!matricula || !password) {
+    return res.status(400).json({ error: 'Matrícula e senha são obrigatórias.' });
+  }
+
+  try {
+    db.get('SELECT * FROM users WHERE matricula = ?', [matricula], async (err, user) => {
+      if (err) {
+        console.error('Erro na consulta ao banco:', err);
+        return res.status(500).json({ error: 'Erro interno no servidor.' });
+      }
+
+      if (!user) {
+        return res.status(401).json({ error: 'Matrícula ou senha inválidos.' });
+      }
+
+      const senhaValida = await bcrypt.compare(password, user.password);
+      if (!senhaValida) {
+        return res.status(401).json({ error: 'Matrícula ou senha inválidos.' });
+      }
+
+      const token = jwt.sign(
+        { id: user.id, matricula: user.matricula },
+        JWT_SECRET,
+        { expiresIn: '8h' }
+      );
+
+      return res.json({
+        token,
+        usuario: {
+          id: user.id,
+          name: user.name,
+          matricula: user.matricula
+        }
+      });
+    });
+  } catch (error) {
+    console.error('Erro no fluxo de autenticação:', error);
+    return res.status(500).json({ error: 'Erro interno no servidor.' });
+  }
+};
+
+const me = async (req, res) => {
+  const userId = req.userId;
+
+  if (!userId) {
+    return res.status(401).json({ error: 'Não autorizado.' });
+  }
+
+  db.get('SELECT id, name, matricula FROM users WHERE id = ?', [userId], (err, user) => {
+    if (err || !user) {
+      return res.status(404).json({ error: 'Aluno não encontrado.' });
+    }
+    return res.json(user);
+  });
+};
+
+module.exports = { register, login, me };

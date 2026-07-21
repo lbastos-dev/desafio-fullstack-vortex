@@ -1,45 +1,82 @@
-const CACHE_NAME = 'vortex-marketplace-v1';
-const ASSETS_TO_CACHE = [
+const CACHE_NAME = 'desapego-unifor-v1';
+const STATIC_ASSETS = [
   '/',
   '/index.html',
-  '/src/main.jsx',
-  '/src/App.jsx',
-  '/src/App.css',
-  '/manifest.json'
+  '/manifest.json',
+  '/favicon.svg',
+  '/icon-192.png',
+  '/icon-512.png',
 ];
 
-// Instalação do Service Worker e armazenamento dos arquivos estáticos essenciais
+// Instalação — caches estáticos essenciais
 self.addEventListener('install', (event) => {
-  self.skipWaiting(); // 🔥 Força o SW novo a se tornar ativo imediatamente
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      console.log('SW: Arquivos essenciais indexados no cache com sucesso.');
-      return cache.addAll(ASSETS_TO_CACHE);
+      return cache.addAll(STATIC_ASSETS);
     })
   );
 });
 
-// Ativação do Service Worker e limpeza de caches antigos
+// Ativação — limpa caches antigos
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cache) => {
           if (cache !== CACHE_NAME) {
-            console.log('SW: Removendo cache antigo:', cache);
             return caches.delete(cache);
           }
         })
       );
     })
   );
+  self.clients.claim();
 });
 
-// Estratégia de Cache: Network First (Tenta a rede primeiro para dados atualizados, cai no cache se offline)
+// Busca — Network First para API, Cache First para assets
 self.addEventListener('fetch', (event) => {
+  const { request } = event;
+  const url = new URL(request.url);
+
+  // API calls: Network First (dados atualizados)
+  if (url.pathname.startsWith('/api/')) {
+    event.respondWith(
+      fetch(request)
+        .then((response) => {
+          const responseClone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(request, responseClone);
+          });
+          return response;
+        })
+        .catch(() => {
+          return caches.match(request);
+        })
+    );
+    return;
+  }
+
+  // Static assets: Cache First (performance)
   event.respondWith(
-    fetch(event.request).catch(() => {
-      return caches.match(event.request);
+    caches.match(request).then((cached) => {
+      if (cached) {
+        // Atualiza cache em background
+        fetch(request).then((response) => {
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(request, response);
+          });
+        });
+        return cached;
+      }
+
+      return fetch(request).then((response) => {
+        const responseClone = response.clone();
+        caches.open(CACHE_NAME).then((cache) => {
+          cache.put(request, responseClone);
+        });
+        return response;
+      });
     })
   );
 });

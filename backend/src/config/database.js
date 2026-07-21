@@ -22,19 +22,36 @@ db.serialize(() => {
       price REAL,
       isDonation INTEGER,
       imageUrl TEXT,
-      createdAt TEXT
+      userId INTEGER,
+      createdAt TEXT,
+      FOREIGN KEY (userId) REFERENCES users(id)
     )
   `
 );
 
-db.run(`
+  db.run(`
     CREATE TABLE IF NOT EXISTS users (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT NOT NULL,
-      email TEXT UNIQUE NOT NULL,
+      matricula TEXT UNIQUE NOT NULL,
       password TEXT NOT NULL
     )
-  `);
+  `, function () {
+    const bcrypt = require('bcryptjs');
+    const testMatricula = '20260001';
+    const testPassword = '123456';
+
+    db.get('SELECT id FROM users WHERE matricula = ?', [testMatricula], (err, row) => {
+      if (!row) {
+        const hash = bcrypt.hashSync(testPassword, 10);
+        db.run(
+          'INSERT INTO users (name, matricula, password) VALUES (?, ?, ?)',
+          ['Aluno Teste', testMatricula, hash],
+          () => console.log(`Usuário teste criado: matrícula "${testMatricula}" / senha "${testPassword}"`)
+        );
+      }
+    });
+  });
 });
 
 module.exports = db;
