@@ -15,8 +15,9 @@ class AnnouncementController {
         return res.status(400).json({ error: 'Itens que não são doação precisam de um preço válido.' });
       }
 
+      const baseUrl = process.env.BACKEND_URL || `${req.protocol}://${req.get('host')}`;
       const imageUrl = req.file
-        ? `http://localhost:3000/uploads/${req.file.filename}`
+        ? `${baseUrl}/uploads/${req.file.filename}`
         : null;
 
       const newAnnouncement = await AnnouncementModel.create({
