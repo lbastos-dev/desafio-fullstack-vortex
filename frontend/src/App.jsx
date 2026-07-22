@@ -6,6 +6,7 @@ function App() {
   const getInitialView = () => {
     const params = new URLSearchParams(window.location.search);
     if (params.get('view') === 'mobile') return 'mobile';
+    if (window.matchMedia('(display-mode: standalone)').matches) return 'mobile';
     return 'desktop';
   };
 
