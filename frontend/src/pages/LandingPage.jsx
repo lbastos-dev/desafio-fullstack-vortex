@@ -52,9 +52,9 @@ function LandingPage() {
               <i className="bi bi-search me-2"></i>
               Explorar Itens
             </a>
-            <a href="#anuncios" className="btn btn-outline-primary btn-lg">
-              <i className="bi bi-plus-circle me-2"></i>
-              Anunciar Item
+            <a href="?view=mobile" className="btn btn-outline-primary btn-lg">
+              <i className="bi bi-phone me-2"></i>
+              Anunciar pelo App
             </a>
           </div>
         </div>

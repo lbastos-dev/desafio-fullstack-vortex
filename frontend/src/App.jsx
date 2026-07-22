@@ -1,13 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import LandingPage from './pages/LandingPage';
 import MobileApp from './pages/MobileApp';
 
 function App() {
-  const [viewMode, setViewMode] = useState('desktop'); // 'desktop' ou 'mobile'
+  const getInitialView = () => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('view') === 'mobile') return 'mobile';
+    return 'desktop';
+  };
+
+  const [viewMode, setViewMode] = useState(getInitialView);
 
   return (
   <div className="min-vh-100 bg-white">
-    {/* Barra superior de simulação adaptada ao padrão institucional */}
+    {/* Barra superior de simulação — só aparece no desktop */}
     <nav className="navbar navbar-expand-lg navbar-light menu-main-bar">
       <div className="container-fluid d-flex align-items-center justify-content-between px-4">
         
