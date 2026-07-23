@@ -56,3 +56,14 @@ export async function apiDelete(path, token) {
   }
   return response.ok;
 }
+
+export async function apiGetAuth(path, token) {
+  const headers = {};
+  if (token) headers['Authorization'] = `Bearer ${token}`;
+
+  const response = await fetch(`${API_BASE}${path}`, { headers });
+  if (!response.ok) {
+    throw new Error(`Erro ${response.status}`);
+  }
+  return response.json();
+}

@@ -1,21 +1,21 @@
 const db = require('../config/database');
 
 class AnnouncementModel {
-  static create({ title, description, category, price, isDonation, imageUrl, userId }) {
+  static create({ title, description, category, price, isDonation, imageUrl, phone, userId }) {
     return new Promise((resolve, reject) => {
       const query = `
-        INSERT INTO announcements (title, description, category, price, isDonation, imageUrl, userId, createdAt)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO announcements (title, description, category, price, isDonation, imageUrl, phone, userId, createdAt)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
       `;
       
       const finalPrice = isDonation ? 0 : Number(price);
-      const finalIsDonation = isDonation ? 1 : 0; // SQLite armazena booleanos como 0 ou 1
+      const finalIsDonation = isDonation ? 1 : 0;
       const finalImageUrl = imageUrl || 'https://via.placeholder.com/150';
       const createdAt = new Date().toISOString();
 
       db.run(
         query,
-        [title, description, category, finalPrice, finalIsDonation, finalImageUrl, userId, createdAt],
+        [title, description, category, finalPrice, finalIsDonation, finalImageUrl, phone || null, userId, createdAt],
         function (err) {
           if (err) return reject(err);
           
@@ -27,6 +27,7 @@ class AnnouncementModel {
             price: finalPrice,
             isDonation: Boolean(finalIsDonation),
             imageUrl: finalImageUrl,
+            phone: phone || null,
             userId,
             createdAt
           });
@@ -48,7 +49,6 @@ class AnnouncementModel {
       db.all(query, params, (err, rows) => {
         if (err) return reject(err);
         
-        // Mapeia os dados para garantir o formato booleano correto no JSON de saída
         const formattedRows = rows.map(row => ({
           ...row,
           isDonation: Boolean(row.isDonation)
@@ -59,13 +59,21 @@ class AnnouncementModel {
     });
   }
 
-  static delete(id) {
+  static findById(id) {
     return new Promise((resolve, reject) => {
-      const query = 'DELETE FROM announcements WHERE id = ?';
-      
-      db.run(query, [id], function (err) {
+      db.get('SELECT * FROM announcements WHERE id = ?', [id], (err, row) => {
         if (err) return reject(err);
-        // 'this.changes' indica o número de linhas afetadas pela query
+        resolve(row);
+      });
+    });
+  }
+
+  static delete(id, userId) {
+    return new Promise((resolve, reject) => {
+      const query = 'DELETE FROM announcements WHERE id = ? AND userId = ?';
+      
+      db.run(query, [id, userId], function (err) {
+        if (err) return reject(err);
         resolve(this.changes > 0);
       });
     });

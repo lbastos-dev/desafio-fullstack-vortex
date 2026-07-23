@@ -136,10 +136,23 @@ function LandingPage() {
                     <p className="card-text text-truncate" style={{ flex: 1 }}>{item.description}</p>
                   </div>
                   <div className="card-footer bg-transparent border-0 pt-0 pb-3">
-                    <button className="btn btn-marinho btn-sm w-100">
-                      <i className="bi bi-chat-dots me-1"></i>
-                      Tenho Interesse
-                    </button>
+                    {item.phone ? (
+                      <a
+                        href={`https://wa.me/55${item.phone.replace(/\D/g, '')}?text=${encodeURIComponent(`Olá! Tenho interesse no item "${item.title}".`)}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="btn btn-sm w-100 fw-bold"
+                        style={{ backgroundColor: '#25D366', color: '#fff', border: 'none' }}
+                      >
+                        <i className="bi bi-whatsapp me-1"></i>
+                        Tenho Interesse
+                      </a>
+                    ) : (
+                      <button className="btn btn-marinho btn-sm w-100" disabled>
+                        <i className="bi bi-chat-dots me-1"></i>
+                        Sem contato
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { apiGet, apiPost, apiPostForm, apiDelete } from '../api';
+import { apiGet, apiGetAuth, apiPost, apiPostForm, apiDelete } from '../api';
 
 const CATEGORIES = [
   { value: 'Saude', label: 'Saúde / Jalecos' },
@@ -12,6 +12,7 @@ const CATEGORIES = [
 
 function MobileApp() {
   const [token, setToken] = useState(localStorage.getItem('token') || '');
+  const [userId, setUserId] = useState(null);
   const [matricula, setMatricula] = useState('');
   const [password, setPassword] = useState('');
   const [authError, setAuthError] = useState('');
@@ -23,6 +24,7 @@ function MobileApp() {
   const [category, setCategory] = useState('Saude');
   const [price, setPrice] = useState('');
   const [isDonation, setIsDonation] = useState(false);
+  const [phone, setPhone] = useState('');
   const [imageFile, setImageFile] = useState(null);
   const [submitting, setSubmitting] = useState(false);
 
@@ -36,7 +38,17 @@ function MobileApp() {
   };
 
   useEffect(() => {
-    if (token) fetchMyItems();
+    if (token) {
+      (async () => {
+        try {
+          const data = await apiGetAuth('/api/auth/me', token);
+          setUserId(data.id);
+        } catch {
+          handleLogout();
+        }
+      })();
+      fetchMyItems();
+    }
   }, [token]);
 
   const handleLogin = async (e) => {
@@ -58,6 +70,7 @@ function MobileApp() {
   const handleLogout = () => {
     localStorage.removeItem('token');
     setToken('');
+    setUserId(null);
     setMatricula('');
     setPassword('');
   };
@@ -72,6 +85,7 @@ function MobileApp() {
     formData.append('category', category);
     formData.append('price', isDonation ? 0 : Number(price));
     formData.append('isDonation', isDonation);
+    formData.append('phone', phone);
     if (imageFile) {
       formData.append('image', imageFile);
     }
@@ -82,6 +96,7 @@ function MobileApp() {
       setDescription('');
       setPrice('');
       setIsDonation(false);
+      setPhone('');
       setImageFile(null);
       document.getElementById('inputImagem').value = '';
       fetchMyItems();
@@ -261,7 +276,7 @@ function MobileApp() {
             </label>
           </div>
           {!isDonation && (
-            <div className="mb-3">
+            <div className="mb-2">
               <label className="form-label">Preço (R$)</label>
               <input
                 type="number"
@@ -273,6 +288,16 @@ function MobileApp() {
               />
             </div>
           )}
+          <div className="mb-2">
+            <label className="form-label">Telefone (WhatsApp)</label>
+            <input
+              type="tel"
+              className="form-control form-control-sm"
+              placeholder="Ex: 85999998888"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+            />
+          </div>
           <div className="mb-3">
             <label className="form-label">Imagem do Produto (Opcional)</label>
             <input
@@ -332,13 +357,15 @@ function MobileApp() {
                   </span>
                 </div>
               </div>
-              <button
-                className="btn btn-link p-2"
-                style={{ color: 'var(--unfor-text-muted)' }}
-                onClick={() => handleDelete(item.id)}
-              >
-                <i className="bi bi-trash"></i>
-              </button>
+              {userId && item.userId === userId && (
+                <button
+                  className="btn btn-link p-2"
+                  style={{ color: 'var(--unfor-text-muted)' }}
+                  onClick={() => handleDelete(item.id)}
+                >
+                  <i className="bi bi-trash"></i>
+                </button>
+              )}
             </div>
           ))
         )}

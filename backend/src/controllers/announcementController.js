@@ -4,7 +4,7 @@ class AnnouncementController {
   // POST /anuncios
   static async create(req, res) {
     try {
-      const { title, description, category, price, isDonation } = req.body;
+      const { title, description, category, price, isDonation, phone } = req.body;
       const userId = req.userId;
 
       if (!title || !description || !category) {
@@ -27,6 +27,7 @@ class AnnouncementController {
         price,
         isDonation,
         imageUrl,
+        phone,
         userId
       });
 
@@ -40,7 +41,7 @@ class AnnouncementController {
   // GET /anuncios
   static async list(req, res) {
     try {
-      const { category } = req.query; // Filtro básico exigido no edital
+      const { category } = req.query;
       
       const data = await AnnouncementModel.findAll(category);
       return res.status(200).json(data);
@@ -54,11 +55,12 @@ class AnnouncementController {
   static async delete(req, res) {
     try {
       const { id } = req.params;
+      const userId = req.userId;
       
-      const success = await AnnouncementModel.delete(id);
+      const success = await AnnouncementModel.delete(id, userId);
 
       if (!success) {
-        return res.status(404).json({ error: 'Anúncio não encontrado.' });
+        return res.status(404).json({ error: 'Anúncio não encontrado ou sem permissão.' });
       }
 
       return res.status(200).json({ message: 'Anúncio removido com sucesso.' });

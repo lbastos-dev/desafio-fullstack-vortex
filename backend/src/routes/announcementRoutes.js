@@ -18,6 +18,7 @@ const upload = multer({ storage, limits: { fileSize: 5 * 1024 * 1024 } });
 // Rotas de Autenticação (Públicas)
 router.post('/auth/register', AuthController.register);
 router.post('/auth/login', AuthController.login);
+router.get('/auth/me', authMiddleware, AuthController.me);
 
 // Rotas de Anúncios
 router.get('/anuncios', AnnouncementController.list);

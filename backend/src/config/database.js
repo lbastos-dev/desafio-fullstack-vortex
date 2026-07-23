@@ -22,6 +22,7 @@ db.serialize(() => {
       price REAL,
       isDonation INTEGER,
       imageUrl TEXT,
+      phone TEXT,
       userId INTEGER,
       createdAt TEXT,
       FOREIGN KEY (userId) REFERENCES users(id)
