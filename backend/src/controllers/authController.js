@@ -5,7 +5,7 @@ const db = require('../config/database');
 const JWT_SECRET = process.env.JWT_SECRET || 'unifor_vortex_secret_key';
 
 const register = async (req, res) => {
-  const { name, matricula, password } = req.body;
+  const { name, matricula, password, phone } = req.body;
 
   if (!name || !matricula || !password) {
     return res.status(400).json({ error: 'Nome, matrícula e senha são obrigatórios.' });
@@ -27,8 +27,8 @@ const register = async (req, res) => {
 
     const userId = await new Promise((resolve, reject) => {
       db.run(
-        'INSERT INTO users (name, matricula, password) VALUES (?, ?, ?)',
-        [name, matricula, hashedPassword],
+        'INSERT INTO users (name, matricula, password, phone) VALUES (?, ?, ?, ?)',
+        [name, matricula, hashedPassword, phone || null],
         function (err) {
           if (err) return reject(err);
           resolve(this.lastID);
@@ -40,7 +40,7 @@ const register = async (req, res) => {
 
     return res.status(201).json({
       token,
-      usuario: { id: userId, name, matricula }
+      usuario: { id: userId, name, matricula, phone: phone || null }
     });
   } catch (error) {
     console.error('Erro no registro:', error);
@@ -82,7 +82,8 @@ const login = async (req, res) => {
         usuario: {
           id: user.id,
           name: user.name,
-          matricula: user.matricula
+          matricula: user.matricula,
+          phone: user.phone || null
         }
       });
     });
@@ -99,7 +100,7 @@ const me = async (req, res) => {
     return res.status(401).json({ error: 'Não autorizado.' });
   }
 
-  db.get('SELECT id, name, matricula FROM users WHERE id = ?', [userId], (err, user) => {
+  db.get('SELECT id, name, matricula, phone FROM users WHERE id = ?', [userId], (err, user) => {
     if (err || !user) {
       return res.status(404).json({ error: 'Aluno não encontrado.' });
     }

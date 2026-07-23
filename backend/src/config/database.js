@@ -35,7 +35,8 @@ db.serialize(() => {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       name TEXT NOT NULL,
       matricula TEXT UNIQUE NOT NULL,
-      password TEXT NOT NULL
+      password TEXT NOT NULL,
+      phone TEXT
     )
   `, function () {
     const bcrypt = require('bcryptjs');
@@ -46,9 +47,15 @@ db.serialize(() => {
       if (!row) {
         const hash = bcrypt.hashSync(testPassword, 10);
         db.run(
-          'INSERT INTO users (name, matricula, password) VALUES (?, ?, ?)',
-          ['Aluno Teste', testMatricula, hash],
-          () => console.log(`Usuário teste criado: matrícula "${testMatricula}" / senha "${testPassword}"`)
+          'INSERT INTO users (name, matricula, password, phone) VALUES (?, ?, ?, ?)',
+          ['Aluno Teste', testMatricula, hash, '85997465937'],
+          () => console.log(`Usuário teste criado: matrícula "${testMatricula}" / senha "${testPassword}" / telefone "85997465937"`)
+        );
+      } else {
+        db.run(
+          'UPDATE users SET phone = ? WHERE matricula = ? AND (phone IS NULL OR phone = "")',
+          ['85997465937', testMatricula],
+          () => console.log(`Telefone atualizado para o usuário "${testMatricula}"`)
         );
       }
     });

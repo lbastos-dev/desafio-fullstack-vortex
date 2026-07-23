@@ -43,6 +43,7 @@ function MobileApp() {
         try {
           const data = await apiGetAuth('/api/auth/me', token);
           setUserId(data.id);
+          if (data.phone) setPhone(data.phone);
         } catch {
           handleLogout();
         }
